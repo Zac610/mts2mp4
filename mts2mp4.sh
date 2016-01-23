@@ -43,8 +43,6 @@ echo $filmName
 echo $startTime
 echo $durationTime
 
-#~ exit
-
 rm command
 
 for file in $(ls -1 "$mtsDir"/$mtsFile* | sort -V); do
@@ -58,26 +56,8 @@ echo "cat $(tr '\n' ' '<command)> output.ts" > command1
 rm command
 rm command1
 
-time avconv -i output.ts $startTime $durationTime -c:a copy -c:v libx264 -crf 18 -preset veryfast $filmName.mp4
+time avconv -i output.ts "$startTime" "$durationTime" -c:a copy -c:v libx264 -crf 18 -preset veryfast "$filmName".mp4
 
-exit
+#~ rm -f output.ts
+#command=${command}" -c:v libx264 -strict experimental "$outputFile
 
-outputFile='outputfile.mp4'
-
-rm -f $outputFile
-
-command='avconv -i "concat:'
-
-for file in $(ls -1X *.mts*); do
-	command=${command}$file"|"
-done
-
-command=${command}"|"
-
-command=${command/||/\"}
-
-command=${command}" -c:v libx264 -strict experimental "$outputFile
-
-eval $command
-
-# avconv -i input.ts -c:a copy -c:v libx264 -crf 18 -preset veryfast output.mp4
